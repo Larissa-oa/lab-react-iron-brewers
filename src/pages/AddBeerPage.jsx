@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 
 function AddBeerPage() {
@@ -21,6 +22,38 @@ function AddBeerPage() {
   const handleAttenuationLevel = (e) => setAttenuationLevel(e.target.value);
   const handleContributedBy = (e) => setContributedBy(e.target.value);
 
+  function createNewBeer(event) {
+    event.preventDefault()
+
+    const newBeer = {
+      name: name,
+      tagline: tagline, 
+      description: description,
+      imageUrl: imageUrl,
+      firstBrewed: firstBrewed, 
+      brewersTips: brewersTips, 
+      attenuationLevel: attenuationLevel,
+      contributedBy: contributedBy,
+    }
+
+    axios.post("https://ih-beers-api2.herokuapp.com/beers/new", newBeer)
+    .then((response) => {
+      console.log("Worked", response.data)
+    })
+    .catch((error) => console.log(error))
+    .finally(() => {
+        setName("")
+        setTagline("")
+        setDescription("")
+        setImageUrl("")
+        setFirstBrewed("")
+        setBrewersTips("")
+        setAttenuationLevel(0)
+        setContributedBy("")
+    })
+  }
+ 
+
 
 
   // TASK:
@@ -34,7 +67,7 @@ function AddBeerPage() {
   return (
     <>
       <div className="d-inline-flex flex-column w-100 p-4">
-        <form>
+        <form onSubmit={createNewBeer}>
           <label>Name</label>
           <input
             className="form-control mb-4"
